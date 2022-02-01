@@ -1,5 +1,5 @@
 //generar nuestra conexion con la db!
-
+require('dotenv').config();
 import { Sequelize } from 'sequelize-typescript';
 import config from '../lib/config';
 const {
