@@ -19,10 +19,11 @@ import {
 } from "react-native-responsive-screen";
 import HeaderBar from "../Utils/HeaderBar";
 
-const ProfileCarrier = () => {
+const ProfileCarrier = (props) => {
   // const resptoken = useSelector((store) => store.respToken);
   // const data = useSelector((store) => store.responseLog);
   const navigation = useNavigation();
+  console.log('props',props.route.params.info)
 
   // console.log("AQUI RESPONLOG EN PROFILEUSERScreen", data);
   // console.log("AQUI RESPTOKEN en PROFILEUSERScreen", resptoken);
@@ -48,7 +49,8 @@ const ProfileCarrier = () => {
                   // data.photo !== null
                     // ? data.photo
                     // : 
-                    "https://girbaud.vteximg.com.br/arquivos/ids/190690-500-500/Gorra-Para-Hombre-Marithe-Francois-Girbaud1217.jpg?v=637732022965400000",
+                    props.route.params.info.photo
+                    //"https://girbaud.vteximg.com.br/arquivos/ids/190690-500-500/Gorra-Para-Hombre-Marithe-Francois-Girbaud1217.jpg?v=637732022965400000",
               }}
               style={styles.userImg}
             />

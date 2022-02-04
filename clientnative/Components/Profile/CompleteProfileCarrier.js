@@ -361,7 +361,7 @@ const CompleteProfileCarrier = (props) => {
     dispatch(completeProfileCarrier(obj));
     console.log("soy lo que se envia", obj);
     // changeModalVisible(true)
-    navigation.navigate("ProfileCarrier")
+    navigation.navigate("ProfileCarrier",{info:obj})
   }
 
   //// --> Inicio de componente <-- ////
@@ -423,22 +423,23 @@ const CompleteProfileCarrier = (props) => {
               <View style={styles.viewsInputs}>
                 <Icon name="person-circle-outline" style={styles.icons} />
                 <Text style={{ fontSize: 18, marginLeft: 15 }}>
-                  Santiago
-                  {/* {datosCarrier.eMail} */}
+                  {/* Santiago */}
+                  {props.route.params.login.name}
                 </Text>
               </View>
               <View style={styles.viewsInputs}>
                 <Icon name="person-circle-outline" style={styles.icons} />
                 <Text style={{ fontSize: 18, marginLeft: 15 }}>
-                  Varela
+                  {/* Varela */}
+                  {props.route.params.login.lastname}
                   {/* {datosCarrier.eMail} */}
                 </Text>
               </View>
               <View style={styles.viewsInputs}>
                 <Icon name="mail-outline"  style={styles.icons} />
                 <Text style={{ fontSize: 18, marginLeft: 15 }}>
-                  asd@gmail.com
-                  {/* {datosCarrier.eMail} */}
+                  {/* asd@gmail.com */}
+                  {props.route.params.login.eMail}
                 </Text>
                 <TextInput style={styles.textPlaceholder} />
               </View>
