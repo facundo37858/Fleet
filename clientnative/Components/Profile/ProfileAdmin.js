@@ -21,11 +21,18 @@ import {
 } from "react-native-responsive-screen";
 
 const ProfileAdmin = () => {
-  const resptoken = useSelector((store) => store.respToken);
+  // const login = useSelector((store) => store.login);
   const data = useSelector((store) => store.responseLog);
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const respPermisse = useSelector((store) => store.respPermisse);
+
+  useEffect(() => {
+
+    console.log("ESTE ES  LOGIN",data);
+  }, []);
+  
+
 
   // useEffect(() => {
   //   if (respPermisse === "user sin travel") {
@@ -51,34 +58,35 @@ const ProfileAdmin = () => {
 
   return (
     <View style={{ flex: 1,  backgroundColor: 'white' }}>
-       <View style={{marginTop:hp("-2%"),marginLeft:wp("0%"),marginBottom:hp("-4%")}}>
+       {/* <View style={{marginTop:hp("-2%"),marginLeft:wp("0%"),marginBottom:hp("-4%")}}>
         <HeaderBar  screen={'null'} style={{color:"white"}}/>
-        </View>
+        </View> */}
       <ScrollView showsVerticalScrollIndicator={false}>
 
         <View
           style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
         >
-          <View style={{ marginTop: wp("7%") }}>
+          <View style={{ marginTop: wp("12%") }}>
             <Image
             resizeMode="contain"
             source={{
                 uri:
-                  // data?.photo !== null
-                  //   ? data.photo
-                  //   : 
-                    "https://www.radiotruck.sk/wp-content/uploads/2021/05/cropped-logo-radio-truckmale-1.png",
+                  data?.photo === null || data?.photo === "url"
+                    ? "https://www.radiotruck.sk/wp-content/uploads/2021/05/cropped-logo-radio-truckmale-1.png"
+                    : data?.photo
+                    
               }}
               style={styles.userImg}
             />
           </View>
           <Text style={styles.userName}>
-            Mauro Vila
-            {/* {data.name} {data.lastname} */}
+            {data?.name.charAt(0).toUpperCase() + data?.name.slice(1)} {data?.lastName.charAt(0).toUpperCase() + data?.lastName.slice(1)}
+            
           </Text>
           <Text style={styles.userName2}>
-            Administrador de RadioTruck
-            {/* {data.name} {data.lastname} */}
+            {/* Administrador de RadioTruck */}
+            Administrador de {data?.business.charAt(0).toUpperCase() + data?.business.slice(1)} 
+            
           </Text>
         </View>
 
@@ -98,7 +106,8 @@ const ProfileAdmin = () => {
           <TouchableOpacity
             style={styles.btnText}
             onPress={() => {
-              navigation.navigate("ProfileCarrier");
+              
+              navigation.navigate("ViewFleet");
             }}
           >
             <Icon name="bus-outline" style={styles.icons} />

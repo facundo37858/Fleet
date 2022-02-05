@@ -1,5 +1,25 @@
 import axios from "axios";
-import { API_URLS} from "@env"
+import { API_URLS } from "@env"
+
+
+
+
+export function addCarrier(props) {
+  return async function (dispatch) {
+    try {
+       const add = await axios.post(`${API_URLS}/api/registerfleet`, props) 
+       console.log("ESTO ES ADD", add.data)
+       return dispatch({
+         type: "ADD_CARRIER",
+         payload: add.data
+       })
+    } catch (error) {
+       console.log("Error", error) 
+    }
+  }
+}
+
+
 
 
 export function logiar(payload) {
@@ -86,13 +106,33 @@ export function completeProfileCarrier(payload) {
           `${API_URLS}/api/carrierProfile`,
           payload
         );
-        // console.log('Soy el console.log de response', response)
+        console.log('Soy el console.log de responsecomplete', response.data.payload2[1][0])
         return dispatch({
           type: "COMPLETE_PROFILE_CARRIER",
-          payload: response.data,
+          payload: response.data.payload2[1][0],
         });
       } catch (error) {
         console.log(error.response);
       }
     };
 }
+
+export function quotTravel(payload) {
+  return async function (dispatch) {
+    try {
+      const quote = await axios.post(`${ API_URLS }/api/calculatePrice`, payload);
+      return dispatch({
+        type: "GET_PRICE_QUOTE",
+        payload: quote.data.price,
+      });
+    } catch (error) {
+      console.log("Error", error);
+    }
+  };
+}
+
+export function desmount() {
+  return {
+    type: 'DESMOUNT',
+  };
+};
