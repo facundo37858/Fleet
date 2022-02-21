@@ -6,6 +6,7 @@ import { uuid } from 'uuidv4';
 const bcrypt = require("bcryptjs");
 const router = Router()
 import { Signup } from '../models/Signup';
+import { Truck } from '../models/Truck';
 import { Carrier } from '../models/Carrier';
 
 router.get('/allan', async (req: Request, res: Response, next: NextFunction) => {
@@ -32,27 +33,26 @@ router.get('/carriers', async (req: Request, res: Response, next: NextFunction) 
     }
 });
 
-router.get('/findFleet',async(req:Request,res:Response,next:NextFunction)=>{
- 
-     var fleet=await Signup.findAll({
-        where: {role : { [Op.eq]: false } }
-            }
-        )
-        if(fleet.length===0){return res.send("No hay transportistas registrados");}
-        let arr:any=[]; let carrier:any=[];
-         for(var i=0;i < fleet.length;i++){
-           
-             carrier[i]=await Carrier.findAll({
-                where: {SignupId:fleet[i].id }
-                    }
-                )
-                arr[i]={transportista:fleet[i],vehiculo:carrier[i][0]};
-         }
-    
-        res.send(arr);
-    });
+router.get('/findFleet', async (req: Request, res: Response, next: NextFunction) => {
 
-    
+    var fleet = await Signup.findAll({
+        where: { role: { [Op.eq]: false } },
+    });
+    if (fleet.length === 0) { return res.send(null); }
+    let arr: any = []; let carrier: any = [];
+    for (var i = 0; i < fleet.length; i++) {
+
+        carrier[i] = await Truck.findAll({
+            where: { SignupId: fleet[i].id }
+        }
+        )
+        arr[i] = { transportista: fleet[i], vehiculo: carrier[i].length === 0 ? "No tiene vehiculo registrado" : carrier[i][0] };
+    }
+
+    res.send(arr);
+});
+
+
 router.post('/registerfleet', async (req: Request, res: Response, next: NextFunction) => {
 
     // const data1 = JSON.parse(req.body)
@@ -68,16 +68,16 @@ router.post('/registerfleet', async (req: Request, res: Response, next: NextFunc
         lastName,
         eMail,
         password: passwordHash,
-        role: false
-    }
+        role: false,
+    };
     ////////<inicio formato> Este es el mensaje que se le va a enviar al usuario con formato html
-    let contentHTML =
-        `<h1>New user</h1>
-               <ul>
-                  <li>${name} ${lastName}</li>
-                  <li>email: ${eMail}</li>
-                  <li>password:${password}</li>    
-               </ul> `
+    let contentHTML = `<h1>Bienvenido a Fleet ${name} ${lastName}!</h1>
+                        <h2>Has sido añadido a la Flota</h2>
+                        <h2>Estas son tus credenciales para ingresar a Fleet:</h2>
+               <ul>                  
+                  <li>Mail: ${eMail}</li>
+                  <li>Contraseña: ${password}</li>    
+               </ul> `;
 
     //////</fin formato>
     /////<inicio configuración transporter>ç
@@ -101,6 +101,15 @@ router.post('/registerfleet', async (req: Request, res: Response, next: NextFunc
             defaults: payload,
         })
 
+        const admin = {
+            id: uuid(),
+            eMail: user.eMail,
+            company: user.business,
+            SignupId: user.id
+
+        }
+        await Carrier.create(admin)
+
         if (!created) {
             const payload = {
                 role: 1,
@@ -109,9 +118,9 @@ router.post('/registerfleet', async (req: Request, res: Response, next: NextFunc
         }
 
         let info = await transporter.sendMail({
-            from: '"Logiexpress Fleet" <logiexpressfleet@gmail.com>', // sender address
+            from: '"Fleet" <logiexpressfleet@gmail.com>', // sender address
             to: eMail, // list of receivers
-            subject: "Inicio seccion Fleet", // Subject line
+            subject: "Ingresa a Fleet", // Subject line
             text: "Hello world?", // plain text body
             html: contentHTML, // html body
         });
@@ -172,28 +181,52 @@ router.post('/registerfleet', async (req: Request, res: Response, next: NextFunc
 
 // })
 
-router.get('/findCarrier/:eMail',async(req:Request,res:Response,next:NextFunction)=>{
+router.get('/deleteFleet', async (req: Request, res: Response, next: NextFunction) => {
 
-    const{eMail}=req.params
-
-    try{
-        let carrier= await Signup.findOne({
-            where:{
-
-                [Op.and]:[{eMail:eMail},{identification:null},{role:false}]
-
-                
-
+    const { id } = req.query
+    if (id === '') { return res.send('El id no puede estar vacio') }
+    try {
+        const carrier = await Truck.destroy({
+            where: {
+                SignupId: id
             }
+        })
+        const signup = await Signup.destroy({
+            where: {
+                id: id
+            }
+        })
+
+        if (signup === 1) return res.send({ mensaje: "Usuario eliminado" })
+        else return res.send({ mensaje: "Error al eliminar usuario." })
+
+    }
+    catch (err) {
+        next(err)
+    }
+});
+
+
+
+router.get('/findOneCarrier', async (req: Request, res: Response, next: NextFunction) => {
+
+    const { id } = req.query
+
+    try {
+        let carrier = await Signup.findOne({
+            where: { id: id }, 
+            include: [{
+                model: Truck
+            }]
 
         })
-        if(!carrier){
+        if (!carrier) {
             return res.send(false)//carrir ya completo su perfil
         }
-        return res.send(true)
+        return res.send(carrier)
 
 
-    }catch(err){
+    } catch (err) {
         next(err)
     }
 

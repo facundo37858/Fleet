@@ -21,17 +21,23 @@ import EditProfileCarrier from './Components/Profile/Edit/EditProfileCarrier';
 import EditVehicule from './Components/Profile/Edit/EditVehicule';
 import Home from './Components/Home/Home';
 import startCheckout from './Components/MercadoPago/startCheckout.js'
+import VehiculeDetails from './Components/Añadir Transportista/VehiculeDetails.js'
+import RecoverPassword from './Components/Home/RecoverPassword'
+import ScreenMap from "./Components/ViewMaps/ScreenMap";
+import Mercadopago from "./Components/MercadoPago/Mercadopago";
+import StartCarrier from './Components/Travel/StartCarrier';
+import ScreenAccessToken from './Components/MercadoPago/ScreenAccessToken.js'
+import HistoryCarrier from "./Components/Historial de viaje/HistoryCarrier"
+import Chat from "./Components/Chat/Chat"
+import MapTravel from './Components/ViewMaps/MapTravel'
+
+import TravelOn from "./Components/Historial de viaje/TravelOn.js"
 
 LogBox.ignoreLogs([
   "[react-native-gesture-handler] Seems like you\'re using an old API with gesture components, check out new Gestures system!",
 ]);
 
-
-
 const Stack = createStackNavigator();
-
-
-
 
 const App = () => {
 
@@ -40,32 +46,42 @@ const App = () => {
       <Provider store={store}>
         <NavigationContainer>
           <Stack.Navigator>
-          <Stack.Screen
+            <Stack.Screen
               name="Home"
               component={Home}
               options={{ headerShown: false }}
             />
-                 <Stack.Screen
+            <Stack.Screen
               name="Login"
               component={Login}
-              options={{ headerShown: false }}
+              options={{ headerShown: false, gestureEnabled: false }}
             />
             <Stack.Screen
               name="SingUp"
               component={SingUp}
-              options={{ headerShown: false }}
+              options={{ headerShown: false, gestureEnabled: false }}
             />
             <Stack.Screen
               name="ProfileAdmin"
               component={ProfileAdmin}
-              options={{ headerShown: false }}
+              options={{ headerShown: false, gestureEnabled: false }}
             />
             <Stack.Screen
               name="ProfileCarrier"
               component={ProfileCarrier}
-              options={{ headerShown: false }}
+              options={{ headerShown: false, gestureEnabled: false }}
             />
-            <Stack.Screen 
+            <Stack.Screen
+              name="ScreenMap"
+              component={ScreenMap}
+              options={{ headerShown: false, gestureEnabled: false }}
+            />
+            <Stack.Screen
+              name="MapTravel"
+              component={MapTravel}
+              options={{ headerShown: false, gestureEnabled: false }}
+            />
+            <Stack.Screen
               name="startCheckout"
               component={startCheckout}
               options={{ headerShown: false }}
@@ -118,6 +134,46 @@ const App = () => {
             <Stack.Screen
               name="EditProfileCarrier"
               component={EditProfileCarrier}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="VehiculeDetails"
+              component={VehiculeDetails}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="StartCarrier"
+              component={StartCarrier}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="RecoverPassword"
+              component={RecoverPassword}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="ScreenAccessToken"
+              component={ScreenAccessToken}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="Mercadopago"
+              component={Mercadopago}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="HistoryCarrier"
+              component={HistoryCarrier}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="Chat"
+              component={Chat}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="TravelOn"
+              component={TravelOn}
               options={{ headerShown: false }}
             />
           </Stack.Navigator>

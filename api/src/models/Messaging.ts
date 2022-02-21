@@ -3,25 +3,27 @@ import { Travel } from './Travel'
 import { Signup } from './Signup'
 
 @Table
-export class Admin extends Model {
+export class Messaging extends Model {
+
     @IsUUID(4)
-    @Column({ primaryKey: true })
-    id!: string 
+    @Column({type: DataType.INTEGER,
+        primaryKey: true,
+        autoIncrement: true })
+    id!: number
  
     @Column
-    company!: string
-
-    @Column(DataType.ARRAY(DataType.STRING))
-    eMail!:string
+    messageCarrier!: string
+ 
+    @Column
+    messageAdmin!:string
+    
 
     @BelongsTo(()=>Signup)
-   admin!: Signup
+    trasportista!: Signup
 
     @ForeignKey(()=>Signup)
-    SignupId!:string
-
-    @HasMany(()=>Travel)
-    travel!:Travel
+    room!:string
+ 
 
 
 }
