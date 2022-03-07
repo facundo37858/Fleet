@@ -2,16 +2,11 @@ import { Request,Response, NextFunction, Router } from "express";
 
 
 import { v4 } from "uuid";
-import { Carrier } from "../models/Carrier";
+import { Truck } from "../models/Truck";
 import { Review } from "../models/Review";
 import { Travel } from "../models/Travel";
 
-
-
 const router =Router()
-
-
-
 
 router.post('/reviewAdmin',async(req:Request,res:Response,next:NextFunction)=>{
    

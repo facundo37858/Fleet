@@ -1,60 +1,60 @@
 import { Response, Request, Router, NextFunction } from 'express';
 import { Signup } from '../models/Signup';
-import { Carrier }  from '../models/Carrier';
-import bcrypt from "bcryptjs";
-import passport from 'passport';
-import jwt from 'jsonwebtoken'
+import { Truck }  from '../models/Truck';
+
 
 
 const router=Router()
 
-router.get('/logout', passport.authenticate('jwt', { session: false }), (req: Request, res: Response) => {
-    req.logOut()
-    res.json({ user: { username: '', role: '' }, success: true });
-}); 
+//cambio de lugar las rutas 
+
+// router.get('/logout', passport.authenticate('jwt', { session: false }), (req: Request, res: Response) => {
+//     req.logOut()
+//     res.json({ user: { username: '', role: '' }, success: true });
+// }); 
 
 
-router.post('/changePassword',async(req:Request,res:Response,next:NextFunction)=>{
+// router.post('/changePassword',async(req:Request,res:Response,next:NextFunction)=>{
 
-    const {id,newPassword}=req.body
-    // console.log('id user: ',id)
-    // console.log('newPass: ',newPassword)
+//     const {id,newPassword}=req.body
+//     // console.log('id user: ',id)
+//     // console.log('newPass: ',newPassword)
 
-   try{
+//    try{
 
-    let userEdit= await Signup.findByPk(id)
-    .then(async(user)=>{
-        if(!user){
-            return res.json({menssage:'Not found UserEdit'})
-        }else{
-            let newPasswordHash = await bcrypt.hash(newPassword, 8)
+//     let userEdit= await Signup.findByPk(id)
+//     .then(async(user)=>{
+//         if(!user){
+//             return res.json({menssage:'Not found UserEdit'})
+//         }else{
+//             let newPasswordHash = await bcrypt.hash(newPassword, 8)
 
-            await user.update({password:newPasswordHash})
+//             await user.update({password:newPasswordHash})
 
-            return user
+//             return user
 
-        }
+//         }
         
-    })
+//     })
 
-    res.json({menssage:'update password ok',payload:userEdit})
-}catch(err){
-    next(err)
-}
+//     res.json({menssage:'update password ok',payload:userEdit})
+// }catch(err){
+//     next(err)
+// }
     
 
-})
+// })
 
 router.post('/updateVehicle', async (req: Request, res: Response, next: NextFunction) => {
 	
 	try{
-		const { id, brand, patent, model, color, capacity} = req.body
+		const { id, brand, patent, model, color, capacity, status } = req.body
 	
 		// const carrierId = await Carrier.findOne({ where: { SignupId: id } })
 
 		let vehicle
 
-		if (brand || patent || model || color || capacity) {
+		if (brand || patent || model || color || capacity || status ) {
 
 			let upDateThis: any = {}
 
@@ -63,8 +63,9 @@ router.post('/updateVehicle', async (req: Request, res: Response, next: NextFunc
 			if(model){upDateThis.model = model}
 			if(color){upDateThis.color = color}
 			if(capacity){upDateThis.capacity = capacity}
-			
-			vehicle = await Carrier.update(upDateThis, {
+			if(status){upDateThis.status = status }
+
+			vehicle = await Truck.update(upDateThis, {
 				where: {
 					SignupId: id
 				},

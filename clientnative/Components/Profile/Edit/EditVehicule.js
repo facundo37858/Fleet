@@ -22,6 +22,7 @@ import {
   heightPercentageToDP as hp,
 } from "react-native-responsive-screen";
 import { useDispatch, useSelector } from "react-redux";
+import { updateVehicle } from "../../../Redux/actions";
 // import { editVehicule } from "../../actions";
 // import ModalVehicule from "./ModalVehicule";
 // import { desmount  } from "../../actions";
@@ -115,26 +116,28 @@ const EditVehicule = () => {
   }
 
    //// --> HANDLE SUBMIT <-- ////
-//  function handleSubmit(e) {
-//   e.preventDefault();
-//   const edit= {
-//     brand : vehiculo.brand,
-//     patent : vehiculo.patent,
-//     model : vehiculo.model,
-//     color : vehiculo.color,
-//     capacity : vehiculo.capacity,
-//     license : vehiculo.license,
-//     id: datosCarrier.id
-//   }
-//   dispatch(editVehicule(edit))
-//   console.log("soy lo que se envia el front", edit);
-//  // changeModalVisible(true)
-// }
+ function handleSubmit(e) {
+  e.preventDefault();
+  const edit= {
+    brand : vehiculo.brand,
+    patent : vehiculo.patent,
+    model : vehiculo.model,
+    color : vehiculo.color,
+    capacity : vehiculo.capacity,
+    license : vehiculo.license,
+    id: datosCarrier.id
+  }
+  dispatch(updateVehicle(edit))
+  console.log("soy lo que se envia el front", edit);
+ // changeModalVisible(true)
+}
 
   return (
     <View style={styles.container}>
-      <View>
-      <View style={{marginTop:hp("-1%"),marginLeft:wp("-5%"),}}>
+      <ScrollView 
+       showsVerticalScrollIndicator={false}
+      >
+      <View style={{marginTop:hp("-1%"),marginLeft:wp("-2%"),}}>
       <HeaderBar  screen={'null'} />
       </View>
         <Text style={styles.textEditar}>Editar datos del vehiculo</Text>
@@ -211,7 +214,7 @@ const EditVehicule = () => {
 
           <TouchableOpacity
             style={styles.btnEditar}
-            // onPress={handleSubmit}
+            onPress={handleSubmit}
           >
             <Text style={styles.textBtn}>Editar</Text>
             {/* MODAL */}
@@ -228,7 +231,7 @@ const EditVehicule = () => {
                 </Modal> */}
           </TouchableOpacity>
         </View>
-      </View>
+      </ScrollView>
     </View>
   );
 };
@@ -240,11 +243,11 @@ const styles = StyleSheet.create({
     backgroundColor: 'white'
   },
   textEditar: {
-    fontSize: hp("4.2%"),
+    fontSize: hp("4%"),
     fontWeight: "bold",
     // paddingHorizontal: wp("3%"),
     alignSelf:'center',
-    // marginTop:hp("-1%"),
+    marginTop:hp("2%"),
   },
   containerInputs: {
     marginTop: hp('8%'),
@@ -259,7 +262,7 @@ const styles = StyleSheet.create({
   },
   textPlaceholder: {
     marginLeft: 20,
-    fontSize: hp('2.5%'),
+    fontSize: hp('2.2%'),
     marginBottom: wp('0.25%'),
   },
   icons:{
@@ -269,24 +272,25 @@ const styles = StyleSheet.create({
   btnEditar: {
     backgroundColor: "#ff1c49",
     borderRadius: wp('3%'),
-    width: wp('43%'),
+    width: wp('40%'),
     height: hp('7%'), 
   },
   textBtn: {
     color: "white",
-    fontSize: hp('3.25%'),
+    fontSize: hp('3%'),
     textAlign: 'center',
     fontWeight: 'bold',
-    marginTop: wp('3%')
+    // alignItems:"center"
+    marginTop: wp('2.5%')
   },
   btn2: { 
     flexDirection: "row",
     alignItems: 'center',
-    alignContent: 'center',
+    alignSelf: 'center',
     justifyContent: 'space-between',
     marginTop: hp('8%'),
-    width: wp('90%')
-    
+    width: wp('90%'),
+    marginBottom: hp('10%')
   },
 });
 

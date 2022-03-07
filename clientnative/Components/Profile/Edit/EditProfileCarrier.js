@@ -22,43 +22,55 @@ import { useNavigation } from "@react-navigation/core";
 //Agarrar imagen del celu
 import * as ImagePicker from "expo-image-picker";
 import { useDispatch, useSelector } from "react-redux";
-// import { editProfileCarrier } from "../../actions";
-// import SimpleModal from "./SimpleModal";
-// import { desmount } from "../../actions";
+import { updatePerfil } from '../../../Redux/actions/index.js'
+import SimpleModal from "../../Utils/SimpleModal.js";
+import { desmount } from "../../../Redux/actions/index.js";
 import HeaderBar from "../../Utils/HeaderBar";
 
 
 const EditProfileCarrier = () => {
   const dispatch = useDispatch();
-  const datosCarrier = useSelector((store) => store.responseLog)
- 
-  const editCarrier = useSelector((store) => store.editarPerfilCarrier)
-  //console.log(editCarrier)
-  
-  // useEffect(() => {
-  //   //console.log("SOY DATOS DEL USER", datosUser);
-  //   if(editCarrier?.msg) {
-  //     changeModalVisible(true)
-  //   }
-  // }, [datosCarrier, editCarrier]);
+  const datosUser = useSelector((store) => store.responseLog)
 
-  // useEffect(() => {
-  //   return () => {
-  //    dispatch(desmount())
-  //   };
-  // }, [dispatch]);
+  const editCarrier = useSelector((store) => store.editarPerfilUser)
+  //console.log(editCarrier)
+
+   useEffect(() => {
+   console.log("SOY DATOS DEL USER", datosUser);
+   if(editCarrier?.msg) {
+   changeModalVisible(true)
+   }
+  }, [datosUser, editCarrier]);
+
+  useEffect(() => {
+   return () => {
+   dispatch(desmount())
+  };
+ }, [dispatch]);
 
   /// --> ESTADO PARA EL MODAL <-- ///
-  // const [isModalVisible, setisModalVisible] = useState(false);
-  // const [chooseData, setchooseData] = useState();
+  const [isModalVisible, setisModalVisible] = useState(false);
+  const [chooseData, setchooseData] = useState();
 
-  // const changeModalVisible = (bool) => {
-  //   setisModalVisible(bool);
-  // };
+  const changeModalVisible = (bool) => {
+  setisModalVisible(bool);
+  };
 
-  // const setData = (data) => {
-  //   setchooseData(data);
-  // };
+  const setData = (data) => {
+  setchooseData(data);
+  };
+
+  const handelNavigetion=(e)=>{
+    e.preventDefault()
+    if(datosUser.role){
+      navigation.navigate('ProfileAdmin')
+    }
+    if(!datosUser.role){
+      navigation.navigate('ProfileCarrier')
+    }
+    
+
+  }
 
   ////--> HOOK PARA LA NAVEGACION <-- ////
   const navigation = useNavigation();
@@ -110,69 +122,69 @@ const EditProfileCarrier = () => {
       });
   };
 
-//// --> ESTADO PARA LOS INPUTS <-- ////
-const [user, setUser] = useState({
-  name: '',
-  lastName: '',
-  documentID: '',
-  location: '', 
-  phone: '',
+  //// --> ESTADO PARA LOS INPUTS <-- ////
+  const [user, setUser] = useState({
+    name: '',
+    lastName: '',
+    documentID: '',
+    location: '',
+    phone: '',
 
-});
-
-
-//// ---> HANDLERS INPUTS <--- ////
-const handleChangeName = (name) => {
-  setUser({
-    ...user,
-    name : name,
   });
-};
 
-const handleChangeLastName = (lastName) => {
-  setUser({
-    ...user,
-    lastName : lastName,
-  });
-};
 
-const handleChangeDocumentID = (documentID) => {
-  setUser({
-    ...user,
-    documentID : documentID,
-  });
-};
+  //// ---> HANDLERS INPUTS <--- ////
+  const handleChangeName = (name) => {
+    setUser({
+      ...user,
+      name: name,
+    });
+  };
 
-const handleChangelocation = (location) => {
-  setUser({
-    ...user,
-   location : location,
-  });
-};
+  const handleChangelastName = (lastName) => {
+    setUser({
+      ...user,
+      lastName: lastName,
+    });
+  };
 
-const handleChangePhone = (phone) => {
-  setUser({
-    ...user,
-    phone: phone,
-  });
-};
+  const handleChangeDocumentID = (documentID) => {
+    setUser({
+      ...user,
+      documentID: documentID,
+    });
+  };
 
-//// --> HANDLE SUBMIT <-- ////
-// function handleSubmit(e) {
-//  e.preventDefault();
-//  const edit= {
-//    name : user.name,
-//    lastName: user.lastName,
-//    documentID: user.documentID,
-//    location: user.location,
-//    phone: user.phone,
-//    photo: selectedImage,
-//     id: datosCarrier.id
-//  }
-//  dispatch(editProfileCarrier(edit))
-//  console.log("soy lo que se envia el front", edit);
-// // changeModalVisible(true)
-// }
+  const handleChangelocation = (location) => {
+    setUser({
+      ...user,
+      location: location,
+    });
+  };
+
+  const handleChangePhone = (phone) => {
+    setUser({
+      ...user,
+      phone: phone,
+    });
+  };
+
+  //// --> HANDLE SUBMIT <-- ////
+  function handleSubmit(e) {
+    e.preventDefault();
+    const edit = {
+      name: user.name,
+      lastName: user.lastName,
+      documentID: user.documentID,
+      location: user.location,
+      phone: user.phone,
+      photo: selectedImage,
+      id: datosUser.id
+    }
+    dispatch(updatePerfil(edit))
+    console.log("soy lo que se envia el front", edit);
+    changeModalVisible(true)
+  }
 
   //// --> Inicio de componente <-- ////
 
@@ -182,7 +194,7 @@ const handleChangePhone = (phone) => {
         style={{ backgroundColor: "white" }}
         showsVerticalScrollIndicator={false}
       >
-      {/*   <View style={styles.iconBar}>
+        {/*   <View style={styles.iconBar}>
           <TouchableOpacity
             //no esta conectado a ningun lugar
             onPress={() => navigation.navigate("DatosPersonalesCarrier")}
@@ -190,8 +202,8 @@ const handleChangePhone = (phone) => {
             <Icon name="chevron-back-outline" size={30} />
           </TouchableOpacity>
         </View> */}
-      <HeaderBar screen={'null'} />
-        <Text style={{ fontWeight: "bold", alignSelf:"center", fontSize: hp("5%"), marginTop:hp("-4%"),  }}>
+        <HeaderBar screen={'null'} />
+        <Text style={{ fontWeight: "bold", alignSelf: "center", fontSize: hp("5%"), }}>
           Editar perfil
         </Text>
         {/* Foto e iconito de agregar imagen */}
@@ -208,7 +220,7 @@ const handleChangePhone = (phone) => {
           <View>
             <TouchableWithoutFeedback onPress={openImagePickerAsync}>
               <Image
-                source={require("./add-photo.png")}
+                source={require("../../Utils/add-photo.png")}
                 style={styles.imgAdd}
               />
             </TouchableWithoutFeedback>
@@ -216,16 +228,16 @@ const handleChangePhone = (phone) => {
         </View>
 
         {/* Inicio de inputs formulario */}
-        <View style={styles.containerInputs}  
+        <View style={styles.containerInputs}
         // onSubmit={(e) => handleSubmit(e)}
         >
-          <Text style={{ fontSize: 19, fontWeight: "bold", marginBottom: 10 }}>
+          <Text style={{ fontSize: 19, fontWeight: "bold", marginBottom: 20, marginTop: hp("2%") }}>
             Datos personales
           </Text>
           <View style={styles.viewsInputs}>
             <Icon name="person-outline" size={26} />
             <TextInput
-             value={user.name}
+              value={user.name}
               placeholder="Nombre"
               name="name"
               style={styles.textPlaceholder}
@@ -237,19 +249,19 @@ const handleChangePhone = (phone) => {
           <View style={styles.viewsInputs}>
             <Icon name="person-outline" size={26} />
             <TextInput
-             value={user.lastName}
+              value={user.lastName}
               placeholder="Apellido"
-              name="lastname"
+              name="lastName"
               style={styles.textPlaceholder}
               onChangeText={(lastName) =>
-                handleChangeLastName(lastName)
+                handleChangelastName(lastName)
               }
             />
           </View>
           <View style={styles.viewsInputs}>
             <Icon name="reader-outline" size={26} />
             <TextInput
-             value={user.documentID}
+              value={user.documentID}
               placeholder="Documento de identidad"
               name="documentID"
               style={styles.textPlaceholder}
@@ -280,7 +292,7 @@ const handleChangePhone = (phone) => {
               onChangeText={(location) => handleChangelocation(location)}
             />
           </View>
-          <View style={styles.viewsInputs}>
+          {/* <View style={styles.viewsInputs}>
             <Icon name="reader-outline" size={26} />
             <TextInput
               value={user.cbu}
@@ -289,24 +301,24 @@ const handleChangePhone = (phone) => {
               style={styles.textPlaceholder}
               onChangeText={(cbu) => handleChangeCbu(cbu)}
             />
-          </View>
-         
-            <View style={styles.btn2}>
-              <TouchableOpacity
-                style={styles.btnEditar}
-                onPress={() => navigation.navigate("DatosPersonalesCarrier")}
-              >
-                <Text style={styles.textBtn}>Cancelar</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                ///---> PONER A DONDE TIENE QUE VOLVER <--- ///
-                style={styles.btnEditar}
-              >
-                <Text style={styles.textBtn}  
-                // onPress={handleSubmit}
-                >Editar</Text>
-                {/* MODAL */}
-                {/* <Modal
+          </View> */}
+
+          <View style={styles.btn2}>
+            <TouchableOpacity
+              style={styles.btnEditar}
+              onPress={handelNavigetion}
+            >
+              <Text style={styles.textBtn}>Cancelar</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              ///---> PONER A DONDE TIENE QUE VOLVER <--- ///
+              style={styles.btnEditar}
+            >
+              <Text style={styles.textBtn}
+              onPress={handleSubmit}
+              >Editar</Text>
+              {/* MODAL */}
+              <Modal
                   transparent={true}
                   animationType="fade"
                   visible={isModalVisible}
@@ -316,9 +328,9 @@ const handleChangePhone = (phone) => {
                     changeModalVisible={changeModalVisible}
                     setData={setData}
                   />
-                </Modal> */}
-              </TouchableOpacity>
-            </View>
+                </Modal>
+            </TouchableOpacity>
+          </View>
         </View>
       </ScrollView>
     </View>
@@ -371,15 +383,15 @@ const styles = StyleSheet.create({
     marginTop: 5,
     alignSelf: "center",
     // marginBottom: 20,
-    marginRight: 30,
-    marginLeft: wp("2.5%"),
+    marginRight:wp("10%"),
+    marginLeft: wp("3.5%"),
   },
   textBtn: {
     color: "white",
-    fontSize: hp("3%"),
+    fontSize: hp("2.9%"),
     alignSelf: "center",
-    marginTop: 12,
-    fontWeight:"bold"
+    marginTop: hp("1%"),
+    fontWeight: "bold"
   },
   viewsInputs: {
     margin: 2,
@@ -390,7 +402,7 @@ const styles = StyleSheet.create({
     alignItems: "flex-start",
     marginBottom: 15,
   },
-  btn2: { flexDirection: "row", },
+  btn2: { flexDirection: "row", marginTop:hp("7%"),   },
 });
 
 export default EditProfileCarrier;
